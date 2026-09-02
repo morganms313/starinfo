@@ -1,5 +1,5 @@
 {
-  "name": "html-mediainfo",
+  "name": "starinfo",
   "version": "0.1.0",
   "private": true,
   "description": "StarInfo: portable single-file media inspector powered by MediaInfoLib (WebAssembly)",
