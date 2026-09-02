@@ -37,6 +37,7 @@ export function buildHtml(engine) {
   return substitute(text('src/app.html'), {
     ENGINE: engine,
     CSS: text('src/app.css'),
+    PARSE: text('src/parse-text.js'),
     JS: text('src/app.js'),
     VERSION: pkg.version,
   });

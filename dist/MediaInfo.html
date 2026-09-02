@@ -269,11 +269,43 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</pre>
 
 </script>
 <script>
+// Parses MediaInfo's text output into sections for the Tree view.
+//
+//   General
+//   Format                                   : MPEG-4
+//   <blank>
+//   Audio #1
+//   ...
+//
+// Returns [{ title: 'General', rows: [['Format', 'MPEG-4'], ...] }, ...].
+// A line with no " : " separator starts a new section; blank lines end one.
+function parseMediaInfoText(text) {
+  var sections = [];
+  var current = null;
+  String(text || '').split(/\r?\n/).forEach(function (line) {
+    if (line.trim() === '') { current = null; return; }
+    var m = /^(.*?\S)\s+:\s?(.*)$/.exec(line);
+    if (!m) {
+      current = { title: line.trim(), rows: [] };
+      sections.push(current);
+      return;
+    }
+    if (!current) {
+      current = { title: '', rows: [] };
+      sections.push(current);
+    }
+    current.rows.push([m[1], m[2]]);
+  });
+  return sections;
+}
+
 (function () {
   'use strict';
 
   // ---- constants -----------------------------------------------------------
-  var FORMAT = { text: 'text', tree: 'object', json: 'JSON', xml: 'XML', html: 'HTML' };
+  // Tree is rendered from the text output (same human-readable strings as the desktop
+  // app's tree), so Text and Tree share one parse and one cache entry.
+  var FORMAT = { text: 'text', tree: 'text', json: 'JSON', xml: 'XML', html: 'HTML' };
   var EXT = { text: 'txt', tree: 'txt', json: 'json', xml: 'xml', html: 'html' };
   var VIEWS = Object.keys(FORMAT);
 
@@ -361,9 +393,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</pre>
   }
 
   function noteLibVersion(view, res) {
-    if (state.libVersion) return;
+    if (state.libVersion || view !== 'json') return;
     try {
-      var obj = view === 'tree' ? res : (view === 'json' ? JSON.parse(res) : null);
+      var obj = JSON.parse(res);
       if (obj && obj.creatingLibrary && obj.creatingLibrary.version) {
         state.libVersion = obj.creatingLibrary.version;
         els.libver.textContent = state.libVersion;
@@ -486,7 +518,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</pre>
   }
 
   function showResult(res) {
-    if (state.view === 'tree') { els.report.appendChild(buildTree(res)); return; }
+    if (state.view === 'tree') { els.report.appendChild(buildTree(parseMediaInfoText(res))); return; }
     if (state.view === 'html') {
       var d = document.createElement('div'); d.className = 'htmlview';
       d.appendChild(sanitizeHtml(String(res)));
@@ -513,36 +545,26 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</pre>
     return frag;
   }
 
-  // Tree: one collapsible section per track, rows of field -> value.
-  function buildTree(obj) {
+  // Tree: one collapsible section per track (General, Video, Audio #1, ...), rows of
+  // field -> value, taken from parseMediaInfoText() so values match the Text view.
+  function buildTree(sections) {
     var root = document.createElement('div'); root.className = 'tree';
-    var tracks = (obj && obj.media && obj.media.track) || [];
-    tracks.forEach(function (t) {
+    sections.forEach(function (s) {
       var det = document.createElement('details'); det.open = true;
-      var sum = document.createElement('summary');
-      var title = t['@type'] || 'Track';
-      if (t['@typeorder']) title += ' #' + t['@typeorder'];
-      sum.textContent = title;
+      var sum = document.createElement('summary'); sum.textContent = s.title || 'Track';
       det.appendChild(sum);
       var table = document.createElement('table');
-      appendRows(table, t, '');
+      s.rows.forEach(function (row) {
+        var tr = document.createElement('tr');
+        var td1 = document.createElement('td'); td1.className = 'k'; td1.textContent = row[0];
+        var td2 = document.createElement('td'); td2.textContent = row[1];
+        tr.appendChild(td1); tr.appendChild(td2); table.appendChild(tr);
+      });
       det.appendChild(table);
       root.appendChild(det);
     });
-    if (tracks.length === 0) { var p = document.createElement('p'); p.className = 'loading'; p.textContent = 'No tracks found.'; root.appendChild(p); }
+    if (sections.length === 0) { var p = document.createElement('p'); p.className = 'loading'; p.textContent = 'No tracks found.'; root.appendChild(p); }
     return root;
-  }
-
-  function appendRows(table, obj, prefix) {
-    Object.keys(obj).forEach(function (k) {
-      if (k.charAt(0) === '@') return;
-      var v = obj[k];
-      if (v && typeof v === 'object' && !Array.isArray(v)) { appendRows(table, v, prefix + k + '/'); return; }
-      var tr = document.createElement('tr');
-      var td1 = document.createElement('td'); td1.className = 'k'; td1.textContent = prefix + k;
-      var td2 = document.createElement('td'); td2.textContent = Array.isArray(v) ? v.join(', ') : String(v);
-      tr.appendChild(td1); tr.appendChild(td2); table.appendChild(tr);
-    });
   }
 
   function renderTabs() {

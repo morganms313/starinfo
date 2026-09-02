@@ -99,8 +99,8 @@ Single page, vanilla JS, no framework, no external requests.
 **Views** — Text, Tree, JSON, XML, HTML.
 - Text/JSON/XML/HTML come straight from the engine with the matching
   `format`.
-- Tree is built client-side from `format: 'object'`: one collapsible
-  section per track (`General`, `Video`, `Audio #1`, …), rows of
+- Tree is built client-side by parsing the Text output (`src/parse-text.js`): one collapsible
+  section per track (`General`, `Video`, `Audio #1`, …), rows of human-readable
   field → value. Sections expanded by default; state per section kept in
   memory only.
 
