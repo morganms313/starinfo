@@ -1,17 +1,18 @@
-# html-mediainfo
+# StarInfo
 
-A single portable HTML file that does what MediaInfo does. Double-click `dist/MediaInfo.html`,
+A single portable HTML file that does what MediaInfo does. Double-click `dist/StarInfo.html`,
 drop media files in, read the report. Nothing to install, no server, no network. Files never
 leave the machine.
 
 Powered by the real MediaInfoLib engine via [mediainfo.js](https://mediainfo.js.org)
-(WebAssembly), so the output matches the desktop app.
+(WebAssembly), so the output matches the MediaInfo desktop app. StarInfo is an independent
+project and is not affiliated with or endorsed by MediaArea.net.
 
 ## Deliverables
 
 | File | Purpose |
 |------|---------|
-| `dist/MediaInfo.html` | Hand this to colleagues. ~3.3 MB, self-contained. |
+| `dist/StarInfo.html` | Hand this to anyone. ~3.3 MB, self-contained. |
 | `dist/mediainfo-engine.js` | Drop-in engine for other single-file HTML tools. |
 
 Views: Text, Tree, JSON, XML, HTML. "Full" shows every field (MediaInfo's Complete mode).
@@ -38,14 +39,15 @@ One MediaInfoLib instance is kept per format; calls on the same format run one a
 ```bash
 npm install
 npm run build     # writes dist/
-npm test          # build checks + Node smoke test against test/fixtures/sample.mp4
+npm test          # build checks, text-parser tests, Node smoke test against test/fixtures/sample.mp4
 npm run fixture   # regenerate the fixture (needs ffmpeg)
 ```
 
 To update the engine, change the pinned `mediainfo.js` version in `package.json`, `npm install`,
-`npm run build`, `npm test`, and re-check `dist/MediaInfo.html` in a browser opened from disk.
+`npm run build`, `npm test`, and re-check `dist/StarInfo.html` in a browser opened from disk.
 
 ## Licenses
 
 mediainfo.js (© buzz) and MediaInfoLib (© MediaArea.net SARL) are BSD-2-Clause. The About panel
-in the page reproduces the notices. This repository is BSD-2-Clause as well.
+in the page reproduces the notices. This repository is BSD-2-Clause as well; see `LICENSE`.
+"MediaInfo" is a product name of MediaArea.net.

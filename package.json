@@ -2,7 +2,7 @@
   "name": "html-mediainfo",
   "version": "0.1.0",
   "private": true,
-  "description": "Portable single-file MediaInfo viewer (MediaInfoLib via WebAssembly)",
+  "description": "StarInfo: portable single-file media inspector powered by MediaInfoLib (WebAssembly)",
   "type": "module",
   "scripts": {
     "build": "node build/build.mjs",

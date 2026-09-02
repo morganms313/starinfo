@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Builds dist/mediainfo-engine.js (reusable) and dist/MediaInfo.html (deliverable).
+// Builds dist/mediainfo-engine.js (reusable) and dist/StarInfo.html (deliverable).
 // No bundler: reads sources, base64-inlines the WASM, substitutes @@MARKERS@@.
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -48,10 +48,10 @@ function main() {
   const engine = buildEngine();
   writeFileSync(resolve(root, 'dist/mediainfo-engine.js'), engine);
   const html = buildHtml(engine);
-  writeFileSync(resolve(root, 'dist/MediaInfo.html'), html);
+  writeFileSync(resolve(root, 'dist/StarInfo.html'), html);
   const mb = (s) => (Buffer.byteLength(s) / 1048576).toFixed(2) + ' MB';
   console.log(`dist/mediainfo-engine.js  ${mb(engine)}`);
-  console.log(`dist/MediaInfo.html       ${mb(html)}`);
+  console.log(`dist/StarInfo.html       ${mb(html)}`);
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) main();

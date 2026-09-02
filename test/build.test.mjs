@@ -25,7 +25,7 @@ test('html: markers replaced, scripts compile, required ids present', () => {
   const engine = buildEngine();
   const html = buildHtml(engine);
   assert.ok(!/@@[A-Z_0-9]+@@/.test(html), 'no markers left');
-  assert.ok(html.includes('<title>MediaInfo</title>'));
+  assert.ok(html.includes('<title>StarInfo</title>'));
   const scripts = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map((m) => m[1]);
   assert.equal(scripts.length, 2, 'engine script + app script');
   for (const s of scripts) assert.doesNotThrow(() => new Function(s));
