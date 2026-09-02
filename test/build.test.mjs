@@ -20,3 +20,18 @@ test('engine: markers replaced, payload intact, self-contained, compiles', () =>
   assert.ok(!engine.includes('</script'), 'safe to inline in <script>');
   assert.doesNotThrow(() => new Function(engine), 'engine compiles');
 });
+
+test('html: markers replaced, scripts compile, required ids present', () => {
+  const engine = buildEngine();
+  const html = buildHtml(engine);
+  assert.ok(!/@@[A-Z_0-9]+@@/.test(html), 'no markers left');
+  assert.ok(html.includes('<title>MediaInfo</title>'));
+  const scripts = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map((m) => m[1]);
+  assert.equal(scripts.length, 2, 'engine script + app script');
+  for (const s of scripts) assert.doesNotThrow(() => new Function(s));
+  for (const id of ['picker', 'tabs', 'full', 'copy', 'save', 'clear', 'about', 'files', 'report', 'hint', 'veil', 'ver', 'aboutDlg', 'libver', 'aboutClose']) {
+    assert.ok(html.includes(`id="${id}"`), `id ${id}`);
+  }
+  for (const v of ['text', 'tree', 'json', 'xml', 'html']) assert.ok(html.includes(`data-view="${v}"`), `tab ${v}`);
+  assert.ok(!html.includes('http://') && !html.includes('https://cdn'), 'no external resource references');
+});

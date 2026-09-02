@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>MediaInfo</title>
+<style>
+@@CSS@@
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="brand">
+    <span class="logo" aria-hidden="true">MI</span>
+    <h1>MediaInfo</h1>
+    <span class="ver" id="ver" title="mediainfo.js version"></span>
+  </div>
+  <div class="tools">
+    <label class="btn primary" for="picker">Open files…</label>
+    <input id="picker" type="file" multiple hidden>
+    <nav class="tabs" id="tabs" role="tablist" aria-label="Report view">
+      <button type="button" role="tab" data-view="text">Text</button>
+      <button type="button" role="tab" data-view="tree">Tree</button>
+      <button type="button" role="tab" data-view="json">JSON</button>
+      <button type="button" role="tab" data-view="xml">XML</button>
+      <button type="button" role="tab" data-view="html">HTML</button>
+    </nav>
+    <label class="toggle" title="Show all fields (MediaInfo “Complete” mode)">
+      <input type="checkbox" id="full"> Full
+    </label>
+    <span class="spacer"></span>
+    <button type="button" class="btn" id="copy" disabled>Copy</button>
+    <button type="button" class="btn" id="save" disabled>Save</button>
+    <button type="button" class="btn" id="clear" disabled>Clear all</button>
+    <button type="button" class="btn ghost" id="about" aria-haspopup="dialog">About</button>
+  </div>
+</header>
+
+<main class="body">
+  <aside class="files" id="files" aria-label="Files">
+    <p class="empty">No files yet</p>
+  </aside>
+  <section class="report" id="report" aria-live="polite">
+    <div class="hint" id="hint">
+      <div class="hint-icon" aria-hidden="true">⬇</div>
+      <p class="hint-title">Drop media files anywhere</p>
+      <p class="hint-sub">or use <strong>Open files…</strong></p>
+      <p class="hint-sub muted">Files are analysed on this computer and never leave it.</p>
+    </div>
+  </section>
+</main>
+
+<div class="veil" id="veil" aria-hidden="true"><span>Drop to analyse</span></div>
+
+<dialog id="aboutDlg" class="about">
+  <h2>About MediaInfo (portable)</h2>
+  <dl>
+    <dt>mediainfo.js</dt><dd>@@VERSION@@ — MediaInfoLib compiled to WebAssembly, https://mediainfo.js.org</dd>
+    <dt>MediaInfoLib</dt><dd id="libver">unknown (open the About panel after analysing a file)</dd>
+    <dt>Privacy</dt><dd>This page makes no network requests. Files are read locally in your browser; nothing is uploaded.</dd>
+  </dl>
+  <h3>Licenses</h3>
+  <p>mediainfo.js — Copyright © buzz. MediaInfoLib — Copyright © 2002–2026 MediaArea.net SARL (https://mediaarea.net). Both are distributed under the BSD-2-Clause license:</p>
+  <pre class="license">Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice,
+   this list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</pre>
+  <form method="dialog"><button type="submit" class="btn primary" id="aboutClose">Close</button></form>
+</dialog>
+
+<script>
+@@ENGINE@@
+</script>
+<script>
+@@JS@@
+</script>
+</body>
+</html>
